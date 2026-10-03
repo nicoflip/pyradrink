@@ -220,11 +220,25 @@ body.walking .scene{animation:walkForward 1.9s cubic-bezier(.45,0,.4,1) forwards
   40%{transform:scale(1.8) translateY(-2px);}
   60%{transform:scale(2.7) translateY(2px);}
   80%{transform:scale(3.9) translateY(-1px);}
-  100%{transform:scale(5.2) translateY(-2%);}
+  100%{transform:scale(4.8) translateY(-2%);}
 }
 body.walking #app{animation:walkFadeApp 1.1s ease-in forwards;}
 @keyframes walkFadeApp{0%{opacity:1; transform:scale(1);} 60%{opacity:.5; transform:scale(.99);} 100%{opacity:0; transform:scale(.95);}}
 body.walking::after{content:''; position:fixed; inset:0; z-index:5; pointer-events:none; background:radial-gradient(circle at 41% 34%, transparent 15%, rgba(4,8,4,.75) 100%); animation:walkVignette 1.9s ease-in-out forwards;}
+@keyframes walkVignette{from{opacity:0;} 70%{opacity:.7;} to{opacity:1;}}
+
+/* ── RESPONSIVE ZOOM TARGET ADAPTATION ── */
+@media (max-width: 599px){
+  .scene{transform-origin:41% 34%;}
+}
+@media (min-width: 600px) and (max-width: 899px){
+  .scene{transform-origin:46% 40%;}
+  body.walking::after{background:radial-gradient(circle at 46% 40%, transparent 15%, rgba(4,8,4,.75) 100%);}
+}
+@media (min-width: 900px){
+  .scene{transform-origin:50% 48%;}
+  body.walking::after{background:radial-gradient(circle at 50% 48%, transparent 15%, rgba(4,8,4,.75) 100%);}
+}
 @keyframes walkVignette{from{opacity:0;} 70%{opacity:.7;} to{opacity:1;}}
 body.walking .fab-next{animation:walkFadeApp .5s ease forwards;}
 .center-flex.top{justify-content:flex-start; padding-top:2px;}
