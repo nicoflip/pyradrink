@@ -212,7 +212,7 @@ input[type=range]{width:100%; accent-color:var(--gold);}
    repeating-linear-gradient(45deg,rgba(255,255,255,.14) 0 1.5px,transparent 1.5px 6px),repeating-linear-gradient(-45deg,rgba(255,255,255,.14) 0 1.5px,transparent 1.5px 6px),linear-gradient(160deg,#27407a,#15234a);
   border:2px solid var(--navy-ink); box-shadow:inset 0 0 0 2px #fffdf7, inset 0 0 0 3.5px #15234a;
 }
-.scene{transform-origin:38% 34%;}
+.scene{transform-origin:41% 34%;}
 body.walking .scene{animation:walkForward 1.9s cubic-bezier(.45,0,.4,1) forwards; z-index:2;}
 @keyframes walkForward{
   0%{transform:scale(1) translateY(0);}
@@ -224,7 +224,7 @@ body.walking .scene{animation:walkForward 1.9s cubic-bezier(.45,0,.4,1) forwards
 }
 body.walking #app{animation:walkFadeApp 1.1s ease-in forwards;}
 @keyframes walkFadeApp{0%{opacity:1; transform:scale(1);} 60%{opacity:.5; transform:scale(.99);} 100%{opacity:0; transform:scale(.95);}}
-body.walking::after{content:''; position:fixed; inset:0; z-index:5; pointer-events:none; background:radial-gradient(circle at 38% 34%, transparent 15%, rgba(4,8,4,.75) 100%); animation:walkVignette 1.9s ease-in-out forwards;}
+body.walking::after{content:''; position:fixed; inset:0; z-index:5; pointer-events:none; background:radial-gradient(circle at 41% 34%, transparent 15%, rgba(4,8,4,.75) 100%); animation:walkVignette 1.9s ease-in-out forwards;}
 @keyframes walkVignette{from{opacity:0;} 70%{opacity:.7;} to{opacity:1;}}
 body.walking .fab-next{animation:walkFadeApp .5s ease forwards;}
 .center-flex.top{justify-content:flex-start; padding-top:2px;}
