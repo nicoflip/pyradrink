@@ -883,21 +883,27 @@ function confirmReplay(){
 }
 
 function updateZoomTarget(){
-  const target = document.getElementById('svgTableCards');
-  if(!target) return;
-  const rect = target.getBoundingClientRect();
-  if(!rect.width || !rect.height) return;
-  const targetX = rect.left + rect.width * 0.5;
-  const targetY = rect.top + rect.height * 0.3;
-  const originX = (targetX / window.innerWidth) * 100;
-  const originY = (targetY / window.innerHeight) * 100;
+  const W = window.innerWidth;
+  const H = window.innerHeight;
+  if(!W || !H) return;
+  const X_svg = 166.63;
+  const Y_svg = 677.28;
+  const AR = W / H;
+  let originX, originY;
+  if(AR <= 0.5){
+    originY = (Y_svg / 800) * 100;
+    originX = 50 + (X_svg - 200) * (H / W) / 8 * 100;
+  } else {
+    originX = (X_svg / 400) * 100;
+    originY = 100 - (800 - Y_svg) / 400 * (W / H) * 100;
+  }
   const scale = 4.8;
-  const dx = ((50 - originX) / scale).toFixed(3);
-  const dy = ((50 - originY) / scale).toFixed(3);
+  const dx = (50 - originX) / scale;
+  const dy = (50 - originY) / scale;
   document.documentElement.style.setProperty('--zoom-x', originX.toFixed(2) + '%');
   document.documentElement.style.setProperty('--zoom-y', originY.toFixed(2) + '%');
-  document.documentElement.style.setProperty('--zoom-dx', dx + '%');
-  document.documentElement.style.setProperty('--zoom-dy', dy + '%');
+  document.documentElement.style.setProperty('--zoom-dx', dx.toFixed(3) + '%');
+  document.documentElement.style.setProperty('--zoom-dy', dy.toFixed(3) + '%');
 }
 
 appEl.addEventListener('click', e=>{
