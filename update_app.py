@@ -135,23 +135,29 @@ body.in-table-view .table-bg-scene {
   filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
 }
 
-/* 3-PART RED RIBBON BANNER (Photo 5) */
-.btn-ribbon-red {
+/* RED RIBBON BUTTON (btn_jouer.png) */
+.btn-img-jouer {
   display: inline-flex; align-items: center; justify-content: center;
   position: relative; cursor: pointer; border: none; background: transparent;
-  padding: 0; margin: 10px 0; touch-action: manipulation;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
+  padding: 0; margin: 8px 0; touch-action: manipulation;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.6));
   transition: transform 0.15s ease, filter 0.15s ease;
 }
-.btn-ribbon-red:hover {
-  transform: translateY(-3px) scale(1.03);
-  filter: drop-shadow(0 12px 22px rgba(255,215,0,0.5));
+.btn-img-jouer:hover {
+  transform: translateY(-3px) scale(1.04);
+  filter: drop-shadow(0 12px 24px rgba(255,215,0,0.6));
 }
-.btn-ribbon-red:active {
-  transform: translateY(3px) scale(0.97);
+.btn-img-jouer:active {
+  transform: translateY(3px) scale(0.96);
 }
-.btn-ribbon-red svg {
+.btn-img-jouer img {
   width: min(85vw, 320px); height: auto; display: block;
+}
+.btn-img-jouer .btn-text-overlay {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -52%);
+  font-family: 'Titan One', cursive; font-size: clamp(20px, 5.5vw, 28px); font-weight: 900;
+  color: #fff9e6; text-shadow: 0 2px 5px rgba(0,0,0,0.9), 0 0 10px rgba(0,0,0,0.8);
+  letter-spacing: 2px; text-transform: uppercase; pointer-events: none; white-space: nowrap;
 }
 
 /* 3-PART TEAL RIBBON BANNER (Photo 5) */
@@ -360,7 +366,6 @@ function renderPhoto5Logo(){
       <ellipse cx="250" cy="60" rx="200" ry="50" fill="url(#logoBg)" stroke="#102e35" stroke-width="5"/>
       <ellipse cx="250" cy="60" rx="192" ry="43" fill="none" stroke="#22899d" stroke-width="2"/>
       <!-- PYRADRINK Text -->
-      <text x="250" y="74" text-anchor="middle" font-family="'Titan One', cursive" font-size="46" font-weight="900" fill="#186a7a" stroke="#102e35" stroke-width="10" paint-order="stroke fill" letter-spacing="3">PYRADRINK</text>
       <text x="250" y="74" text-anchor="middle" font-family="'Titan One', cursive" font-size="46" font-weight="900" fill="#ffffff" letter-spacing="3">PYRADRINK</text>
     </svg>
   </div>`;
@@ -369,20 +374,11 @@ function renderPhoto5Logo(){
 /* Photo 5 Ribbon Button helper (Red) */
 function renderRedRibbonButton(text, action, extraAttrs=''){
   return `
-  <button class="btn-ribbon-red" data-action="${action}" ${extraAttrs}>
-    <svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg">
-      <!-- Left Tail -->
-      <polygon points="10,20 60,10 50,45 60,80 10,70 30,45" fill="#691212" stroke="#280505" stroke-width="3"/>
-      <!-- Right Tail -->
-      <polygon points="330,20 280,10 290,45 280,80 330,70 310,45" fill="#691212" stroke="#280505" stroke-width="3"/>
-      <!-- Main Ribbon Body -->
-      <polygon points="45,12 295,12 285,78 55,78" fill="#a82222" stroke="#280505" stroke-width="4"/>
-      <polygon points="49,16 291,16 283,74 57,74" fill="none" stroke="#d44242" stroke-width="2"/>
-      <!-- Ribbon Text -->
-      <text x="170" y="56" text-anchor="middle" font-family="'Titan One', cursive" font-size="30" font-weight="900" fill="#280505" stroke="#280505" stroke-width="6" paint-order="stroke fill" letter-spacing="2">${text}</text>
-      <text x="170" y="56" text-anchor="middle" font-family="'Titan One', cursive" font-size="30" font-weight="900" fill="#fff9e6" letter-spacing="2">${text}</text>
-    </svg>
+  <button class="btn-img-jouer" data-action="${action}" ${extraAttrs}>
+    <img src="assets/btn_jouer.png" alt="Bouton ${text}">
+    <span class="btn-text-overlay">${text}</span>
   </button>`;
+}
 }
 
 /* Photo 5 Ribbon Button helper (Teal) */
