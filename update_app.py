@@ -1,4 +1,4 @@
-import re
+import os
 
 content = '''<!DOCTYPE html>
 <html lang="fr">
@@ -39,12 +39,12 @@ body{
   background:#0b1d3a;
 }
 
-/* ── BAR ROOM HOME SCENE ── */
+/* ── BAR ROOM HOME SCENE (Photo 4) ── */
 .home-bg-scene {
   position: fixed; inset: 0; z-index: 0; pointer-events: none;
   background: url('assets/media__1790988025283.jpg') center center / cover no-repeat;
   transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.8s ease;
-  transform-origin: 50% 75%;
+  transform-origin: 50% 70%;
 }
 body.zoom-to-table .home-bg-scene {
   transform: scale(3.8) translateY(-15%);
@@ -61,74 +61,112 @@ body.in-table-view .table-bg-scene {
   opacity: 1;
 }
 
-/* ── LAMP FLICKER LIGHT CONE ── */
-.lamp-glow {
-  position: fixed; top: 0; left: 50%; transform: translateX(-50%);
-  width: 500px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle at 50% 20%, rgba(255,230,130,0.45) 0%, rgba(255,170,40,0.18) 45%, transparent 70%);
-  animation: lampFlicker 2.2s infinite alternate ease-in-out;
+/* ── SWINGING LAMP & FLICKERING LIGHT CONE (Photo 1 & 3) ── */
+.lamp-assembly {
+  position: fixed; top: -20px; left: 50%; transform: translateX(-50%);
+  width: 440px; height: 600px; transform-origin: 50% 0%;
+  animation: lampSway 4.5s ease-in-out infinite alternate;
   pointer-events: none; z-index: 1;
 }
-@keyframes lampFlicker {
-  0%, 100% { opacity: 0.85; transform: translateX(-50%) scale(1); }
-  20% { opacity: 0.6; transform: translateX(-50%) scale(0.96); }
-  45% { opacity: 0.95; transform: translateX(-50%) scale(1.04); }
-  70% { opacity: 0.7; transform: translateX(-50%) scale(0.98); }
+@keyframes lampSway {
+  0% { transform: translateX(-50%) rotate(-3.5deg); }
+  100% { transform: translateX(-50%) rotate(3.5deg); }
 }
 
-/* 2 BUZZING FLIES */
-.fly {
-  position: fixed; width: 6px; height: 6px; background: #111; border-radius: 50%;
-  box-shadow: 0 0 4px rgba(255,255,255,0.8); pointer-events: none; z-index: 10;
+.lamp-img {
+  position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+  width: 220px; height: auto;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
 }
-.fly-1 { top: 22%; left: 47%; animation: flyBuzz1 3.2s infinite ease-in-out; }
-.fly-2 { top: 25%; left: 53%; animation: flyBuzz2 4.1s infinite ease-in-out; }
+
+.lamp-light-cone {
+  position: absolute; top: 120px; left: 50%; transform: translateX(-50%);
+  width: 520px; height: 480px;
+  background: radial-gradient(ellipse at 50% 0%, rgba(255,230,120,0.55) 0%, rgba(255,170,40,0.22) 50%, transparent 75%);
+  clip-path: polygon(42% 0%, 58% 0%, 100% 100%, 0% 100%);
+  animation: lightFlicker 2.1s infinite alternate ease-in-out;
+  pointer-events: none;
+}
+@keyframes lightFlicker {
+  0%, 100% { opacity: 0.9; filter: brightness(1); }
+  20% { opacity: 0.65; filter: brightness(0.85); }
+  45% { opacity: 1; filter: brightness(1.15); }
+  70% { opacity: 0.75; filter: brightness(0.9); }
+}
+
+/* ── BUZZING FLIES (Photo 1 & 2) ── */
+.fly {
+  position: fixed; width: 5px; height: 5px; background: #000; border-radius: 50%;
+  box-shadow: 0 0 3px rgba(255,255,255,0.7); pointer-events: none; z-index: 10;
+}
+.fly-1 { top: 28%; left: 46%; animation: flyBuzz1 2.8s infinite ease-in-out; }
+.fly-2 { top: 32%; left: 54%; animation: flyBuzz2 3.6s infinite ease-in-out; }
+.fly-3 { top: 35%; left: 49%; animation: flyBuzz3 4.2s infinite ease-in-out; }
+
 @keyframes flyBuzz1 {
   0% { transform: translate(0, 0); }
-  25% { transform: translate(30px, -20px); }
-  50% { transform: translate(-35px, 25px); }
-  75% { transform: translate(20px, 40px); }
+  20% { transform: translate(35px, -25px); }
+  40% { transform: translate(-40px, 30px); }
+  60% { transform: translate(25px, 45px); }
+  80% { transform: translate(-30px, -35px); }
   100% { transform: translate(0, 0); }
 }
 @keyframes flyBuzz2 {
   0% { transform: translate(0, 0); }
-  25% { transform: translate(-40px, 30px); }
-  50% { transform: translate(45px, -25px); }
-  75% { transform: translate(-20px, -35px); }
+  25% { transform: translate(-45px, 35px); }
+  50% { transform: translate(50px, -30px); }
+  75% { transform: translate(-25px, -40px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes flyBuzz3 {
+  0% { transform: translate(0, 0); }
+  30% { transform: translate(25px, 40px); }
+  60% { transform: translate(-30px, -20px); }
   100% { transform: translate(0, 0); }
 }
 
-/* ── RETRO RIBBON BUTTONS ── */
-.btn-banner-red {
-  background: linear-gradient(180deg, #ff415c 0%, #d81b36 60%, #9e0c21 100%);
-  color: #fff9e6; text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-  border: 3.5px solid #ffe885; border-radius: 999px;
-  font-family: 'Titan One', cursive; text-transform: uppercase;
-  box-shadow: 0 6px 0 #5c0512, 0 10px 20px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.4);
-  padding: 16px 46px; font-size: 24px; letter-spacing: 2px;
-  cursor: pointer; position: relative; transition: all 0.15s ease; touch-action: manipulation;
+/* ── PHOTO 5: LOGO & RIBBON BUTTON STYLES ── */
+.pyradrink-logo-wrap {
+  display: inline-flex; align-items: center; justify-content: center;
+  position: relative; margin-top: 10px;
 }
-.btn-banner-red:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.1);
-  box-shadow: 0 8px 0 #5c0512, 0 14px 25px rgba(255,215,0,0.5);
-}
-.btn-banner-red:active {
-  transform: translateY(4px);
-  box-shadow: 0 2px 0 #5c0512, 0 4px 10px rgba(0,0,0,0.4);
+.pyradrink-logo-svg {
+  width: min(92vw, 420px); height: auto;
+  filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
 }
 
-.btn-banner-teal {
-  background: linear-gradient(180deg, #2fd8d8 0%, #15a5a5 60%, #0a6666 100%);
-  color: #ffffff; text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-  border: 3.5px solid #a8ffff; border-radius: 999px;
-  font-family: 'Titan One', cursive; text-transform: uppercase;
-  box-shadow: 0 6px 0 #043d3d, 0 10px 20px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.4);
-  padding: 12px 28px; font-size: 16px; letter-spacing: 1px;
-  cursor: pointer; position: relative; transition: all 0.15s ease; touch-action: manipulation;
+/* 3-PART RED RIBBON BANNER (Photo 5) */
+.btn-ribbon-red {
+  display: inline-flex; align-items: center; justify-content: center;
+  position: relative; cursor: pointer; border: none; background: transparent;
+  padding: 0; margin: 10px 0; touch-action: manipulation;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.5));
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.btn-ribbon-red:hover {
+  transform: translateY(-3px) scale(1.03);
+  filter: drop-shadow(0 12px 22px rgba(255,215,0,0.5));
+}
+.btn-ribbon-red:active {
+  transform: translateY(3px) scale(0.97);
+}
+.btn-ribbon-red svg {
+  width: min(85vw, 320px); height: auto; display: block;
 }
 
-/* ── BALATRO GLOBAL NEON BACKGROUND GRID ── */
+/* 3-PART TEAL RIBBON BANNER (Photo 5) */
+.btn-ribbon-teal {
+  display: inline-flex; align-items: center; justify-content: center;
+  position: relative; cursor: pointer; border: none; background: transparent;
+  padding: 0; margin: 6px 0; touch-action: manipulation;
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.4));
+  transition: transform 0.15s ease;
+}
+.btn-ribbon-teal:hover { transform: translateY(-2px) scale(1.02); }
+.btn-ribbon-teal svg {
+  width: min(75vw, 240px); height: auto; display: block;
+}
+
 .scanlines{position:fixed; inset:0; z-index:200; pointer-events:none;
   background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,.08) 2px, rgba(0,0,0,.08) 4px);
   animation:scanMove 8s linear infinite;}
@@ -146,17 +184,6 @@ body.shake #app{animation:screenShake .45s cubic-bezier(.36,.07,.19,.97)!importa
 .subtitle,.name{text-shadow:0 2px 5px rgba(0,0,0,.65);}
 .top-bar{display:flex; justify-content:space-between; align-items:center; gap:8px; flex-wrap:wrap;}
 .top-bar .name{color:#fdf6e3; font-size:20px; letter-spacing:.5px; text-shadow:0 2px 0 rgba(0,0,0,.25);}
-
-.hero-title{
-  position:relative; display:inline-flex; align-items:center; background:linear-gradient(180deg,#f8d47c,var(--gold) 55%,#c98a25); color:var(--navy-ink);
-  border:4px solid var(--navy-ink); font-family:'Titan One',cursive;
-  border-radius:999px; padding:16px 40px; font-size:clamp(34px,11vw,56px); letter-spacing:1px;
-  text-shadow:0 2px 0 rgba(255,255,255,.55), 0 -1px 0 rgba(0,0,0,.2);
-  box-shadow:inset 0 -6px 0 rgba(0,0,0,.12), inset 0 0 0 4px rgba(255,255,255,.28), 0 4px 0 #a9761f, 0 9px 0 var(--navy-ink), 0 16px 22px rgba(0,0,0,.45);
-  transform:rotate(-3deg); animation:heroFloat 3.2s ease-in-out infinite;
-}
-.title-pyramid{width:.62em; height:.56em; margin:0 -.01em; vertical-align:middle; flex-shrink:0;}
-@keyframes heroFloat{0%,100%{transform:rotate(-3deg) translateY(0);} 50%{transform:rotate(2deg) translateY(-8px);}}
 
 .btn{
   background:linear-gradient(180deg,#fffdf7,var(--panel)); color:var(--ink); border:3px solid var(--ink);
@@ -264,11 +291,26 @@ input[type=range]{
 </head>
 <body>
 
+<!-- Photo 4 background -->
 <div class="home-bg-scene" aria-hidden="true"></div>
+<!-- Top-down table background -->
 <div class="table-bg-scene" aria-hidden="true"></div>
-<div class="lamp-glow" aria-hidden="true"></div>
+
+<!-- Photo 1 & 3: Swinging lamp & flickering light -->
+<div class="lamp-assembly" aria-hidden="true">
+  <div class="lamp-light-cone"></div>
+  <svg class="lamp-img" viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+    <line x1="100" y1="0" x2="100" y2="70" stroke="#7a1a1a" stroke-width="3"/>
+    <path d="M40 110 C 60 70, 140 70, 160 110 Z" fill="#b82323" stroke="#2b0808" stroke-width="3"/>
+    <ellipse cx="100" cy="110" rx="60" ry="14" fill="#a01b1b" stroke="#2b0808" stroke-width="2"/>
+    <circle cx="100" cy="115" r="14" fill="#fff5b8" filter="drop-shadow(0 0 10px #ffe266)"/>
+  </svg>
+</div>
+
+<!-- Photo 1 & 2: Buzzing flies -->
 <div class="fly fly-1" aria-hidden="true"></div>
 <div class="fly fly-2" aria-hidden="true"></div>
+<div class="fly fly-3" aria-hidden="true"></div>
 
 <div class="vignette" aria-hidden="true"></div>
 <div class="scanlines" aria-hidden="true"></div>
@@ -308,6 +350,68 @@ function freshState(){
 
 function escapeHtml(str){ return str.replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 function rankLabel(r){ return r==='V'?'Valet':(r==='D'?'Dame':(r==='R'?'Roi':(r==='A'?'As':r))); }
+
+/* Photo 5 Logo helper */
+function renderPhoto5Logo(){
+  return `
+  <div class="pyradrink-logo-wrap">
+    <svg class="pyradrink-logo-svg" viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="logoBg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#186a7a"/>
+          <stop offset="100%" stop-color="#0b434e"/>
+        </linearGradient>
+      </defs>
+      <!-- Left Triangle Pointer -->
+      <polygon points="10,60 70,15 70,105" fill="#186a7a" stroke="#102e35" stroke-width="4"/>
+      <!-- Right Triangle Pointer -->
+      <polygon points="490,60 430,15 430,105" fill="#186a7a" stroke="#102e35" stroke-width="4"/>
+      <!-- Central Oval Banner -->
+      <ellipse cx="250" cy="60" rx="200" ry="50" fill="url(#logoBg)" stroke="#102e35" stroke-width="5"/>
+      <ellipse cx="250" cy="60" rx="192" ry="43" fill="none" stroke="#22899d" stroke-width="2"/>
+      <!-- PYRADRINK Text -->
+      <text x="250" y="74" text-anchor="middle" font-family="'Titan One', cursive" font-size="46" font-weight="900" fill="#186a7a" stroke="#102e35" stroke-width="10" paint-order="stroke fill" letter-spacing="3">PYRADRINK</text>
+      <text x="250" y="74" text-anchor="middle" font-family="'Titan One', cursive" font-size="46" font-weight="900" fill="#ffffff" letter-spacing="3">PYRADRINK</text>
+    </svg>
+  </div>`;
+}
+
+/* Photo 5 Ribbon Button helper (Red) */
+function renderRedRibbonButton(text, action, extraAttrs=''){
+  return `
+  <button class="btn-ribbon-red" data-action="${action}" ${extraAttrs}>
+    <svg viewBox="0 0 340 90" xmlns="http://www.w3.org/2000/svg">
+      <!-- Left Tail -->
+      <polygon points="10,20 60,10 50,45 60,80 10,70 30,45" fill="#691212" stroke="#280505" stroke-width="3"/>
+      <!-- Right Tail -->
+      <polygon points="330,20 280,10 290,45 280,80 330,70 310,45" fill="#691212" stroke="#280505" stroke-width="3"/>
+      <!-- Main Ribbon Body -->
+      <polygon points="45,12 295,12 285,78 55,78" fill="#a82222" stroke="#280505" stroke-width="4"/>
+      <polygon points="49,16 291,16 283,74 57,74" fill="none" stroke="#d44242" stroke-width="2"/>
+      <!-- Ribbon Text -->
+      <text x="170" y="56" text-anchor="middle" font-family="'Titan One', cursive" font-size="30" font-weight="900" fill="#280505" stroke="#280505" stroke-width="6" paint-order="stroke fill" letter-spacing="2">${text}</text>
+      <text x="170" y="56" text-anchor="middle" font-family="'Titan One', cursive" font-size="30" font-weight="900" fill="#fff9e6" letter-spacing="2">${text}</text>
+    </svg>
+  </button>`;
+}
+
+/* Photo 5 Ribbon Button helper (Teal) */
+function renderTealRibbonButton(text, action, extraAttrs=''){
+  return `
+  <button class="btn-ribbon-teal" data-action="${action}" ${extraAttrs}>
+    <svg viewBox="0 0 280 80" xmlns="http://www.w3.org/2000/svg">
+      <!-- Left Tail -->
+      <polygon points="10,18 50,10 42,40 50,70 10,62 25,40" fill="#0d424e" stroke="#061f25" stroke-width="3"/>
+      <!-- Right Tail -->
+      <polygon points="270,18 230,10 238,40 230,70 270,62 255,40" fill="#0d424e" stroke="#061f25" stroke-width="3"/>
+      <!-- Main Body -->
+      <polygon points="38,12 242,12 234,68 46,68" fill="#186a7a" stroke="#061f25" stroke-width="3.5"/>
+      <!-- Text -->
+      <text x="140" y="49" text-anchor="middle" font-family="'Titan One', cursive" font-size="24" font-weight="900" fill="#061f25" stroke="#061f25" stroke-width="5" paint-order="stroke fill" letter-spacing="1.5">${text}</text>
+      <text x="140" y="49" text-anchor="middle" font-family="'Titan One', cursive" font-size="24" font-weight="900" fill="#ffffff" letter-spacing="1.5">${text}</text>
+    </svg>
+  </button>`;
+}
 
 function buildDeck(){
   const suits=['♠','♥','♦','♣'], ranks=['2','3','4','5','6','7','8','9','10','V','D','R','A'];
@@ -391,12 +495,10 @@ const appEl=document.getElementById('app');
 
 function renderHome(){
   return `
-  <div class="center-flex" style="justify-content:space-between; padding:40px 0;">
-    <div class="title-wrap" style="text-align:center; margin-top:20px;">
-      <span class="hero-title">PYRADRINK</span>
-    </div>
-    <div style="position:fixed; bottom:40px; left:50%; transform:translateX(-50%); z-index:30;">
-      <button class="btn-banner-red" data-action="startGameZoom">JOUER</button>
+  <div class="center-flex" style="justify-content:space-between; padding:30px 0;">
+    ${renderPhoto5Logo()}
+    <div style="position:fixed; bottom:36px; left:50%; transform:translateX(-50%); z-index:30;">
+      ${renderRedRibbonButton('JOUER', 'startGameZoom')}
     </div>
   </div>`;
 }
@@ -421,7 +523,7 @@ function renderSetup(){
   return `
   <div class="top-bar"><div class="name">Inscription des joueurs</div></div>
   <div class="center-flex screen-pad-fab">${renderPlayersBlock()}</div>
-  <button class="btn-banner-red fab-next" data-action="toStep2" ${canNext?'':'disabled'}>SUIVANT</button>`;
+  <div class="fab-next">${renderRedRibbonButton('SUIVANT', 'toStep2', canNext?'':'disabled')}</div>`;
 }
 
 function renderPreviewPyramid(rows){
@@ -447,7 +549,7 @@ function renderPyramidSize(){
       <div class="subtitle" style="font-size:22px; color:#ffd700;">${S.rows} rangées (${totalCards} cartes)</div>
     </div>
   </div>
-  <button class="btn-banner-red fab-next" data-action="toDealing">DISTRIBUER</button>`;
+  <div class="fab-next">${renderRedRibbonButton('DISTRIBUER', 'toDealing')}</div>`;
 }
 
 function renderDealing(){
@@ -465,7 +567,7 @@ function renderDealReveal(){
     <div class="subtitle">Vos cartes (Glissez-déposez pour réorganiser)</div>
     <div class="hand-row wide-hand">${cardsHtml}</div>
   </div>
-  <button class="btn-banner-red fab-next" data-action="validateHand">VALIDER</button>`;
+  <div class="fab-next">${renderRedRibbonButton('VALIDER', 'validateHand')}</div>`;
 }
 
 function renderGame(){
@@ -498,7 +600,7 @@ function renderGame(){
   return `
   <div class="top-bar">
     <div class="name">Pyradrink</div>
-    <button class="btn-banner-teal" data-action="togglePyramidOverlay" style="padding:6px 14px; font-size:14px;">👁 Pyramide</button>
+    ${renderTealRibbonButton('👁 Pyramide', 'togglePyramidOverlay')}
   </div>
   <div class="center-flex">
     <div class="pyramid-stage">
@@ -509,13 +611,13 @@ function renderGame(){
   </div>
   <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:auto;">
     <button class="btn row-indicator" disabled style="min-width:44px; font-weight:800;">${rowNum}</button>
-    <button class="btn-banner-red" data-action="nextCard">SUIVANT</button>
+    ${renderRedRibbonButton('SUIVANT', 'nextCard')}
     <button class="btn bluff" data-action="startBluff" ${S.overlayCard? '':'disabled'}>BLUFF</button>
   </div>`;
 }
 
 function renderBluffPick(){
-  const list=S.players.map(p=>`<button class="btn-banner-teal" data-action="pickBluffTarget" data-name="${escapeHtml(p)}">${escapeHtml(p)}</button>`).join('');
+  const list=S.players.map(p=>renderTealRibbonButton(escapeHtml(p), 'pickBluffTarget', `data-name="${escapeHtml(p)}"`)).join('');
   return `<div class="center-flex"><div class="subtitle" style="font-size:22px;">Qui est désigné bluffeur ?</div><div style="display:flex; flex-direction:column; gap:10px;">${list}</div></div>`;
 }
 
@@ -531,7 +633,7 @@ function renderBluffSearch(){
   const title = S.bluffAwaitingChoice
     ? (S.bluffResult && S.bluffResult.ok ? 'Trouvé ! Il boit.' : 'Perdu ! Il boit double.')
     : (S.overlayCard? `Où est ${rankLabel(S.overlayCard.rank)} ?` : '');
-  const buttons = S.bluffAwaitingChoice? `<button class="btn-banner-red" data-action="bluffNext">SUIVANT</button>` : '';
+  const buttons = S.bluffAwaitingChoice? renderRedRibbonButton('SUIVANT', 'bluffNext') : '';
   return `<div class="center-flex">
     <div class="subtitle" style="font-size:20px;">${title}</div>
     <div class="hand-row wide-hand">${cardsHtml}</div>
@@ -543,8 +645,8 @@ function renderEnd(){
   return `<div class="center-flex" style="gap:24px;">
     <div class="subtitle" style="font-size:32px; color:#ffd700;">🔥 PYRAMIDE TERMINÉE ! 🔥</div>
     <div style="display:flex; gap:16px;">
-      <button class="btn-banner-teal" data-action="terminer">QUITTER</button>
-      <button class="btn-banner-red" data-action="confirmReplay">REJOUER</button>
+      ${renderTealRibbonButton('QUITTER', 'terminer')}
+      ${renderRedRibbonButton('REJOUER', 'confirmReplay')}
     </div>
   </div>`;
 }
@@ -741,4 +843,4 @@ with open("index.html", "w", encoding="utf-8") as f:
 with open("Pyradrink.html", "w", encoding="utf-8") as f:
     f.write(content)
 
-print("SUCCESS")
+print("COMPLETE SUCCESS")
