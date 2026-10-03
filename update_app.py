@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+import re
+
+content = '''<!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
@@ -731,3 +733,12 @@ render();
 </script>
 </body>
 </html>
+'''
+
+with open("index.html", "w", encoding="utf-8") as f:
+    f.write(content)
+
+with open("Pyradrink.html", "w", encoding="utf-8") as f:
+    f.write(content)
+
+print("SUCCESS")
