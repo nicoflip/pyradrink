@@ -1,0 +1,22 @@
+{
+  "name": "Pyradrink",
+  "short_name": "Pyradrink",
+  "description": "Le jeu de la pyramide",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0b1d3a",
+  "theme_color": "#0b1d3a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "apple-touch-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
