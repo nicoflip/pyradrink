@@ -31,7 +31,7 @@
   :root:not([data-theme="dark"]){ --bg1:#155c46; --bg2:#0e4636; }
 }
 :root[data-theme="dark"]{ --bg1:#0c3d2e; --bg2:#0a2e23; }
-html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px); height:100%; background:#0b1d3a;}
 *{box-sizing:border-box;}
 body{
   margin:0; height:100%; color:#fdf6e3;
@@ -284,12 +284,43 @@ body.walking .fab-next{animation:walkFadeApp .5s ease forwards;}
   .tagline { font-size: 14px; letter-spacing: 4px; padding: 6px 22px; }
 }
 
+/* ─── Tablette portrait / iPad (768px – 899px) ─── */
+@media (min-width: 768px) and (max-width: 899px) {
+  html { background: #0b1d3a; min-height: 100vh; min-height: 100dvh; }
+  body { height: auto; min-height: 100vh; min-height: 100dvh; align-items: center; justify-content: center; padding: 32px 20px; }
+  #app {
+    flex: none; min-height: 0; width: 100%; max-width: 700px;
+    border-radius: 24px;
+    background: rgba(5, 12, 34, 0.70);
+    border: 1.5px solid rgba(255,255,255,0.13);
+    backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.65), inset 0 1px 0 rgba(255,255,255,0.12);
+    padding: 36px 40px; gap: 20px;
+  }
+  .fab-next { position: static; right: auto; bottom: auto; margin-top: auto; align-self: flex-start; }
+  .screen-pad-fab { padding-bottom: 0; }
+  .card, .card-back { width: 42px; height: 60px; font-size: 12px; }
+  .card-slot { width: 42px; height: 60px; }
+  .pyramid { gap: 7px; }
+  .pyramid-row { gap: 7px; }
+  .flip-card { width: 156px; height: 220px; }
+  .hand-card { width: 74px; height: 108px; font-size: 20px; }
+  .big-card { width: 136px; height: 192px; font-size: 32px; }
+  .pack .card-back { width: 46px; height: 66px; margin-left: -18px; }
+  .btn { padding: 14px 28px; font-size: 16px; }
+  .stepper-value { font-size: 66px; }
+  .stepper-btn { width: 64px; height: 64px; font-size: 32px; }
+  .glass { max-width: none; width: 100%; }
+  .glass .player-list { max-height: 150px; }
+  .name-bar input[type=text] { font-size: 20px; }
+}
+
 /* ─── Desktop (≥ 900px) ─── */
 @media (min-width: 900px) {
 
-  /* Body : centrage vertical */
-  html { height: auto; }
-  body { min-height: 100vh; height: auto; align-items: center; justify-content: center; padding: 40px 24px; }
+  /* Body : centrage vertical – utilise dvh pour iOS standalone */
+  html { height: auto; min-height: 100vh; min-height: 100dvh; background: #0b1d3a; }
+  body { height: auto; min-height: 100vh; min-height: 100dvh; align-items: center; justify-content: center; padding: 40px 24px; }
 
   /* #app devient une belle carte verre flottante sur le décor */
   #app {
