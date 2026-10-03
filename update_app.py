@@ -167,13 +167,6 @@ body.in-table-view .table-bg-scene {
   width: min(75vw, 240px); height: auto; display: block;
 }
 
-.scanlines{position:fixed; inset:0; z-index:200; pointer-events:none;
-  background:repeating-linear-gradient(0deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 2px, rgba(0,0,0,.08) 2px, rgba(0,0,0,.08) 4px);
-  animation:scanMove 8s linear infinite;}
-@keyframes scanMove{from{background-position:0 0;} to{background-position:0 100%;}}
-.vignette{position:fixed; inset:0; z-index:199; pointer-events:none;
-  background:radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,.55) 100%);}
-
 #app{position:relative; z-index:2; flex:1; display:flex; flex-direction:column; min-height:100%; padding:16px; gap:16px; transition:opacity .4s ease;}
 h1,h2,h3,.name{font-family:'Titan One','Baloo 2',inherit;}
 
@@ -311,9 +304,6 @@ input[type=range]{
 <div class="fly fly-1" aria-hidden="true"></div>
 <div class="fly fly-2" aria-hidden="true"></div>
 <div class="fly fly-3" aria-hidden="true"></div>
-
-<div class="vignette" aria-hidden="true"></div>
-<div class="scanlines" aria-hidden="true"></div>
 
 <div id="app"></div>
 
