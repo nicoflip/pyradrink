@@ -128,8 +128,8 @@ body.in-table-view .table-bg-scene {
   display: inline-flex; align-items: center; justify-content: center;
   position: relative; margin-top: 10px;
 }
-.pyradrink-logo-svg {
-  width: min(92vw, 420px); height: auto;
+.pyradrink-logo-img {
+  width: min(90vw, 420px); height: auto; display: block;
   filter: drop-shadow(0 6px 14px rgba(0,0,0,0.6));
 }
 
@@ -349,23 +349,7 @@ function rankLabel(r){ return r==='V'?'Valet':(r==='D'?'Dame':(r==='R'?'Roi':(r=
 function renderPhoto5Logo(){
   return `
   <div class="pyradrink-logo-wrap">
-    <svg class="pyradrink-logo-svg" viewBox="0 0 500 120" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <linearGradient id="logoBg" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#186a7a"/>
-          <stop offset="100%" stop-color="#0b434e"/>
-        </linearGradient>
-      </defs>
-      <!-- Left Triangle Pointer -->
-      <polygon points="10,60 70,15 70,105" fill="#186a7a" stroke="#102e35" stroke-width="4"/>
-      <!-- Right Triangle Pointer -->
-      <polygon points="490,60 430,15 430,105" fill="#186a7a" stroke="#102e35" stroke-width="4"/>
-      <!-- Central Oval Banner -->
-      <ellipse cx="250" cy="60" rx="200" ry="50" fill="url(#logoBg)" stroke="#102e35" stroke-width="5"/>
-      <ellipse cx="250" cy="60" rx="192" ry="43" fill="none" stroke="#22899d" stroke-width="2"/>
-      <!-- PYRADRINK Text -->
-      <text x="250" y="74" text-anchor="middle" font-family="'Titan One', cursive" font-size="46" font-weight="900" fill="#ffffff" letter-spacing="3">PYRADRINK</text>
-    </svg>
+    <img src="assets/pyradrink_logo.png" alt="PYRADRINK Logo" class="pyradrink-logo-img">
   </div>`;
 }
 
