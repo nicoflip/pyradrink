@@ -145,8 +145,20 @@ input[type=range]{width:100%; accent-color:var(--gold);}
 .hand-row{display:flex; gap:10px; justify-content:center; flex-wrap:wrap;}
 .hand-card{width:58px; height:84px; font-size:16px; cursor:pointer;}
 .hand-card.selected{outline:3px solid var(--accent);}
-.hand-row.wide-hand{width:100%; max-width:none; flex-wrap:nowrap; gap:3vw;}
+.hand-row.wide-hand{width:100%; max-width:none; flex-wrap:nowrap; gap:3vw; position:relative; align-items:center;}
 .wide-hand .hand-card{flex:1 1 0; width:auto; height:min(30vh,26vw); max-height:220px; font-size:min(7vw,34px); gap:6px;}
+.card-insert-indicator{
+  position:absolute; top:-10px; bottom:-10px; width:4px;
+  background:linear-gradient(180deg,#fff2a8,#f0bb5c 50%,#fff2a8);
+  border-radius:999px; box-shadow:0 0 14px #ffd700, 0 0 26px rgba(255,215,0,.85), 0 0 3px #fff;
+  pointer-events:none; z-index:100; transform:translateX(-50%);
+  transition:left .09s ease-out; display:flex; flex-direction:column; justify-content:space-between; align-items:center;
+}
+.card-insert-indicator::before, .card-insert-indicator::after{
+  content:''; width:12px; height:12px; background:#ffd700; border:2.5px solid #fff; border-radius:50%; box-shadow:0 0 8px #ffd700; flex-shrink:0;
+}
+.card-insert-indicator::before{margin-top:-6px;}
+.card-insert-indicator::after{margin-bottom:-6px;}
 .transition-screen{gap:26px;}
 .big-card{width:110px; height:158px; font-size:28px; border-radius:12px; gap:4px;}
 .game-controls{display:flex; justify-content:space-between; align-items:center; gap:8px;}
@@ -869,12 +881,52 @@ function onCardPointerDown(e){
   const initialIdx = parseInt(card.dataset.idx, 10);
   if(isNaN(initialIdx)) return;
 
+  const container = appEl.querySelector('.hand-row.wide-hand');
+  if(!container) return;
+
   const rect = card.getBoundingClientRect();
   const startX = e.clientX;
   const startY = e.clientY;
   let isDragging = false;
   let ghost = null;
-  let currentTargetIdx = null;
+  let indicator = null;
+  let targetIdx = initialIdx;
+
+  // Other cards in the hand
+  const allCards = Array.from(container.querySelectorAll('.hand-card'));
+  const otherCards = allCards.filter(c => parseInt(c.dataset.idx, 10) !== initialIdx);
+
+  function getTargetIndexAndX(clientX){
+    const cRect = container.getBoundingClientRect();
+    if(otherCards.length === 0){
+      return { idx: 0, x: cRect.width / 2 };
+    }
+
+    const cardData = otherCards.map(c => {
+      const r = c.getBoundingClientRect();
+      return {
+        center: (r.left + r.right) / 2,
+        leftRel: r.left - cRect.left,
+        rightRel: r.right - cRect.left
+      };
+    });
+
+    let idx = 0;
+    while(idx < cardData.length && clientX >= cardData[idx].center){
+      idx++;
+    }
+
+    let x;
+    if(idx === 0){
+      x = Math.max(8, cardData[0].leftRel - 12);
+    } else if(idx === cardData.length){
+      x = Math.min(cRect.width - 8, cardData[cardData.length - 1].rightRel + 12);
+    } else {
+      x = (cardData[idx - 1].rightRel + cardData[idx].leftRel) / 2;
+    }
+
+    return { idx, x };
+  }
 
   function onPointerMove(eMove){
     const dx = eMove.clientX - startX;
@@ -896,21 +948,18 @@ function onCardPointerDown(e){
       ghost.style.touchAction = 'none';
       document.body.appendChild(ghost);
       card.classList.add('dragging-source');
+
+      indicator = document.createElement('div');
+      indicator.className = 'card-insert-indicator';
+      container.appendChild(indicator);
     }
 
     if(isDragging && ghost){
       ghost.style.transform = `translate3d(${dx}px, ${dy}px, 0) scale(1.08) rotate(3deg)`;
-      const elem = document.elementFromPoint(eMove.clientX, eMove.clientY);
-      const targetCard = elem ? elem.closest('.hand-card') : null;
-      const container = appEl.querySelector('.hand-row.wide-hand');
-      if(container){
-        container.querySelectorAll('.hand-card').forEach(c => c.classList.remove('drag-over'));
-      }
-      if(targetCard && targetCard !== card && container && container.contains(targetCard)){
-        targetCard.classList.add('drag-over');
-        currentTargetIdx = parseInt(targetCard.dataset.idx, 10);
-      } else {
-        currentTargetIdx = null;
+      const res = getTargetIndexAndX(eMove.clientX);
+      targetIdx = res.idx;
+      if(indicator){
+        indicator.style.left = res.x + 'px';
       }
     }
   }
@@ -923,18 +972,27 @@ function onCardPointerDown(e){
     if(ghost && ghost.parentNode){
       ghost.parentNode.removeChild(ghost);
     }
-    card.classList.remove('dragging-source');
-    const container = appEl.querySelector('.hand-row.wide-hand');
-    if(container){
-      container.querySelectorAll('.hand-card').forEach(c => c.classList.remove('drag-over'));
+    if(indicator && indicator.parentNode){
+      indicator.parentNode.removeChild(indicator);
     }
+    card.classList.remove('dragging-source');
 
-    if(isDragging && currentTargetIdx !== null && currentTargetIdx !== initialIdx){
-      const hand = S.hands[S.currentDealer];
-      if(hand && hand[initialIdx] !== undefined && hand[currentTargetIdx] !== undefined){
-        [hand[initialIdx], hand[currentTargetIdx]] = [hand[currentTargetIdx], hand[initialIdx]];
-        S.swapPick = null;
-        render();
+    if(isDragging){
+      const captureClick = (eClick) => {
+        eClick.stopPropagation();
+        eClick.preventDefault();
+      };
+      window.addEventListener('click', captureClick, { capture: true, once: true });
+      setTimeout(() => window.removeEventListener('click', captureClick, { capture: true }), 100);
+
+      if(targetIdx !== initialIdx){
+        const hand = S.hands[S.currentDealer];
+        if(hand && hand[initialIdx] !== undefined){
+          const [moved] = hand.splice(initialIdx, 1);
+          hand.splice(targetIdx, 0, moved);
+          S.swapPick = null;
+          render();
+        }
       }
     }
   }
